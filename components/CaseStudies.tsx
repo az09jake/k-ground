@@ -195,10 +195,41 @@ const categories = [
 ];
 
 export const CaseStudies: React.FC = () => {
-  const { language } = useLanguage();
+  const { language, getText } = useLanguage();
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [selectedCase, setSelectedCase] = useState<CaseStudy | null>(null);
+
+  const texts = {
+    badge: { ko: '포트폴리오', en: 'Portfolio', ja: 'ポートフォリオ', zh: '作品集', th: 'ผลงาน' },
+    title: { ko: '성공 사례', en: 'Case Studies', ja: '成功事例', zh: '成功案例', th: 'กรณีศึกษา' },
+    subtitle: {
+      ko: 'K-GROUND가 성공적으로 진행한 글로벌 팝업스토어와 체험 이벤트를 확인하세요.',
+      en: 'Explore the global pop-up stores and experience events successfully executed by K-GROUND.',
+      ja: 'K-GROUNDが成功裏に実施したグローバルポップアップストアと体験イベントをご覧ください。',
+      zh: '探索K-GROUND成功举办的全球快闪店和体验活动。',
+      th: 'สำรวจป๊อปอัพสโตร์และอีเวนต์ประสบการณ์ระดับโลกที่ K-GROUND ดำเนินการสำเร็จ'
+    },
+    all: { ko: '전체', en: 'All', ja: 'すべて', zh: '全部', th: 'ทั้งหมด' },
+    keyHighlights: { ko: '주요 하이라이트', en: 'Key Highlights', ja: '主なハイライト', zh: '主要亮点', th: 'ไฮไลท์หลัก' },
+    viewDetails: { ko: '상세 보기', en: 'View Details', ja: '詳細を見る', zh: '查看详情', th: 'ดูรายละเอียด' },
+    cases: { ko: '사례', en: 'cases', ja: '事例', zh: '案例', th: 'กรณี' },
+    customProposal: {
+      ko: '귀사의 프로젝트에 맞는 맞춤형 제안을 받아보세요',
+      en: 'Get a customized proposal for your project',
+      ja: '貴社のプロジェクトに合ったカスタム提案を受け取りましょう',
+      zh: '为您的项目获取定制提案',
+      th: 'รับข้อเสนอที่ปรับแต่งสำหรับโครงการของคุณ'
+    },
+    downloadProposal: { ko: '제안서 다운로드', en: 'Download Proposal', ja: '提案書ダウンロード', zh: '下载提案', th: 'ดาวน์โหลดข้อเสนอ' },
+    totalProjects: { ko: '총 프로젝트', en: 'Total Projects', ja: '総プロジェクト', zh: '总项目', th: 'โครงการทั้งหมด' },
+    totalVisitors: { ko: '누적 방문객', en: 'Total Visitors', ja: '累計訪問者', zh: '累计访客', th: 'ผู้เข้าชมทั้งหมด' },
+    clientSatisfaction: { ko: '고객 만족도', en: 'Client Satisfaction', ja: '顧客満足度', zh: '客户满意度', th: 'ความพึงพอใจลูกค้า' },
+    countries: { ko: '운영 국가', en: 'Countries', ja: '運営国', zh: '运营国家', th: 'ประเทศ' },
+    partner: { ko: '파트너', en: 'Partner', ja: 'パートナー', zh: '合作伙伴', th: 'พันธมิตร' },
+    inquireSimilar: { ko: '이런 프로젝트 문의하기', en: 'Inquire Similar Project', ja: '類似プロジェクトお問い合わせ', zh: '咨询类似项目', th: 'สอบถามโครงการคล้ายกัน' },
+    close: { ko: '닫기', en: 'Close', ja: '閉じる', zh: '关闭', th: 'ปิด' }
+  };
 
   // Filter cases by category
   const filteredCases = selectedCategory === 'all'
@@ -226,16 +257,13 @@ export const CaseStudies: React.FC = () => {
         {/* Section Header */}
         <div className="text-center mb-12">
           <span className="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-semibold mb-4">
-            {language === 'ko' ? '포트폴리오' : 'Portfolio'}
+            {getText(texts.badge)}
           </span>
           <h2 className="text-3xl md:text-5xl font-bold font-heading mb-6 text-dark">
-            {language === 'ko' ? '성공 사례' : 'Case Studies'}
+            {getText(texts.title)}
           </h2>
           <p className="text-gray-500 max-w-2xl mx-auto text-lg">
-            {language === 'ko'
-              ? 'K-GROUND가 성공적으로 진행한 글로벌 팝업스토어와 체험 이벤트를 확인하세요.'
-              : 'Explore the global pop-up stores and experience events successfully executed by K-GROUND.'
-            }
+            {getText(texts.subtitle)}
           </p>
         </div>
 
@@ -251,7 +279,7 @@ export const CaseStudies: React.FC = () => {
                   : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
-              {language === 'ko' ? cat.labelKo : cat.labelEn}
+              {cat.id === 'all' ? getText(texts.all) : cat.labelEn}
               {cat.id !== 'all' && (
                 <span className="ml-2 text-xs opacity-70">
                   ({caseStudies.filter(c => c.category === cat.id).length})
@@ -340,7 +368,7 @@ export const CaseStudies: React.FC = () => {
               </div>
 
               {/* Highlights */}
-              <h4 className="font-semibold text-dark mb-3">{language === 'ko' ? '주요 하이라이트' : 'Key Highlights'}</h4>
+              <h4 className="font-semibold text-dark mb-3">{getText(texts.keyHighlights)}</h4>
               <ul className="space-y-2 mb-8">
                 {(language === 'ko' ? activeCase.highlightsKo : activeCase.highlightsEn).map((highlight, idx) => (
                   <li key={idx} className="flex items-center gap-2 text-gray-700">
@@ -355,7 +383,7 @@ export const CaseStudies: React.FC = () => {
                 onClick={() => setSelectedCase(activeCase)}
                 className={`inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r ${activeCase.color} text-white rounded-full font-semibold hover:shadow-lg transition-shadow`}
               >
-                {language === 'ko' ? '상세 보기' : 'View Details'}
+                {getText(texts.viewDetails)}
                 <ArrowRight size={18} />
               </button>
             </div>
@@ -378,20 +406,17 @@ export const CaseStudies: React.FC = () => {
 
           {/* Case count */}
           <p className="text-center text-gray-400 text-sm mt-4">
-            {activeIndex + 1} / {filteredCases.length} {language === 'ko' ? '사례' : 'cases'}
+            {activeIndex + 1} / {filteredCases.length} {getText(texts.cases)}
           </p>
         </div>
 
         {/* Bottom CTA */}
         <div className="mt-16 text-center">
           <p className="text-gray-500 mb-4">
-            {language === 'ko'
-              ? '귀사의 프로젝트에 맞는 맞춤형 제안을 받아보세요'
-              : 'Get a customized proposal for your project'
-            }
+            {getText(texts.customProposal)}
           </p>
           <button className="px-8 py-4 bg-dark text-white rounded-full font-bold hover:bg-gray-800 transition-colors inline-flex items-center gap-2">
-            {language === 'ko' ? '제안서 다운로드' : 'Download Proposal'}
+            {getText(texts.downloadProposal)}
             <ArrowRight size={18} />
           </button>
         </div>
@@ -400,19 +425,19 @@ export const CaseStudies: React.FC = () => {
         <div className="mt-16 grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-gray-50 rounded-2xl p-6 text-center">
             <p className="text-3xl font-bold text-primary">{caseStudies.length}+</p>
-            <p className="text-sm text-gray-500">{language === 'ko' ? '총 프로젝트' : 'Total Projects'}</p>
+            <p className="text-sm text-gray-500">{getText(texts.totalProjects)}</p>
           </div>
           <div className="bg-gray-50 rounded-2xl p-6 text-center">
             <p className="text-3xl font-bold text-primary">70K+</p>
-            <p className="text-sm text-gray-500">{language === 'ko' ? '누적 방문객' : 'Total Visitors'}</p>
+            <p className="text-sm text-gray-500">{getText(texts.totalVisitors)}</p>
           </div>
           <div className="bg-gray-50 rounded-2xl p-6 text-center">
             <p className="text-3xl font-bold text-primary">98%</p>
-            <p className="text-sm text-gray-500">{language === 'ko' ? '고객 만족도' : 'Client Satisfaction'}</p>
+            <p className="text-sm text-gray-500">{getText(texts.clientSatisfaction)}</p>
           </div>
           <div className="bg-gray-50 rounded-2xl p-6 text-center">
             <p className="text-3xl font-bold text-primary">5+</p>
-            <p className="text-sm text-gray-500">{language === 'ko' ? '운영 국가' : 'Countries'}</p>
+            <p className="text-sm text-gray-500">{getText(texts.countries)}</p>
           </div>
         </div>
       </div>
@@ -472,7 +497,7 @@ export const CaseStudies: React.FC = () => {
               {/* Partner Info */}
               {selectedCase.partnerKo && (
                 <div className="mb-6 pb-6 border-b border-gray-100">
-                  <p className="text-sm text-gray-500 mb-1">{language === 'ko' ? '파트너' : 'Partner'}</p>
+                  <p className="text-sm text-gray-500 mb-1">{getText(texts.partner)}</p>
                   <p className="font-bold text-dark">{language === 'ko' ? selectedCase.partnerKo : selectedCase.partnerEn}</p>
                 </div>
               )}
@@ -496,7 +521,7 @@ export const CaseStudies: React.FC = () => {
 
               {/* Highlights */}
               <div className="mb-8">
-                <h4 className="font-bold text-dark mb-4 text-lg">{language === 'ko' ? '주요 하이라이트' : 'Key Highlights'}</h4>
+                <h4 className="font-bold text-dark mb-4 text-lg">{getText(texts.keyHighlights)}</h4>
                 <div className="grid grid-cols-2 gap-3">
                   {(language === 'ko' ? selectedCase.highlightsKo : selectedCase.highlightsEn).map((highlight, idx) => (
                     <div key={idx} className="flex items-center gap-2 text-gray-700 bg-gray-50 rounded-lg p-3">
@@ -534,13 +559,13 @@ export const CaseStudies: React.FC = () => {
                   onClick={() => setSelectedCase(null)}
                   className={`flex-1 px-6 py-3 bg-gradient-to-r ${selectedCase.color} text-white rounded-full font-bold text-center hover:shadow-lg transition-shadow`}
                 >
-                  {language === 'ko' ? '이런 프로젝트 문의하기' : 'Inquire Similar Project'}
+                  {getText(texts.inquireSimilar)}
                 </a>
                 <button
                   onClick={() => setSelectedCase(null)}
                   className="px-6 py-3 border-2 border-gray-200 text-gray-600 rounded-full font-bold hover:bg-gray-50 transition-colors"
                 >
-                  {language === 'ko' ? '닫기' : 'Close'}
+                  {getText(texts.close)}
                 </button>
               </div>
             </div>

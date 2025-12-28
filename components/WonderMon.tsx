@@ -3,25 +3,63 @@ import { Camera, CheckCircle2, Palette, Sparkles, ShoppingBag, Users, Star, Play
 import { useLanguage } from '../contexts/LanguageContext';
 
 export const WonderMon: React.FC = () => {
-  const { language } = useLanguage();
+  const { getText, language } = useLanguage();
   const [activeTab, setActiveTab] = useState<'features' | 'process' | 'results'>('features');
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
   const [sliderPosition, setSliderPosition] = useState(0);
   const sliderRef = useRef<HTMLDivElement>(null);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
 
+  const texts = {
+    spotlightTech: { ko: 'Spotlight Technology', en: 'Spotlight Technology', ja: 'Spotlight Technology', zh: 'Spotlight Technology', th: 'Spotlight Technology' },
+    subtitle: {
+      ko: 'AI 기반 퍼스널컬러 진단 플랫폼으로 K-Beauty의 미래를 경험하세요. 정확한 피부톤 분석을 통해 나만의 컬러를 찾고, 맞춤 패션과 메이크업 추천을 받아보세요.',
+      en: 'Experience the future of K-Beauty with our AI-driven Personal Color Analysis platform. Find your colors through accurate skin tone analysis and get customized fashion and makeup recommendations.',
+      ja: 'AIベースのパーソナルカラー診断プラットフォームでK-Beautyの未来を体験してください。正確な肌色分析であなただけのカラーを見つけ、カスタムファッションとメイクの推奨を受けましょう。',
+      zh: '通过AI驱动的个人色彩分析平台体验K-Beauty的未来。通过精确的肤色分析找到您的颜色，获得定制的时尚和化妆建议。',
+      th: 'สัมผัสอนาคตของ K-Beauty ด้วยแพลตฟอร์มวิเคราะห์สีผิว AI ค้นหาสีของคุณและรับคำแนะนำแฟชั่นและแต่งหน้าแบบเฉพาะบุคคล'
+    },
+    watchDemo: { ko: '체험 영상 보기', en: 'Watch Demo', ja: 'デモを見る', zh: '观看演示', th: 'ดูเดโม' },
+    accuracy: { ko: '분석 정확도', en: 'Accuracy', ja: '分析精度', zh: '分析准确度', th: 'ความแม่นยำ' },
+    tabFeatures: { ko: '주요 기능', en: 'Features', ja: '主な機能', zh: '主要功能', th: 'ฟีเจอร์' },
+    tabProcess: { ko: '진단 과정', en: 'Process', ja: '診断プロセス', zh: '诊断过程', th: 'กระบวนการ' },
+    tabResults: { ko: '진단 결과', en: 'Results', ja: '診断結果', zh: '诊断结果', th: 'ผลลัพธ์' },
+    processIntro: {
+      ko: '간단한 4단계로 나만의 퍼스널컬러를 찾아보세요.',
+      en: 'Find your personal color in 4 simple steps.',
+      ja: '簡単な4ステップであなただけのパーソナルカラーを見つけましょう。',
+      zh: '通过简单的4个步骤找到您的个人色彩。',
+      th: 'ค้นหาสีประจำตัวของคุณใน 4 ขั้นตอนง่ายๆ'
+    },
+    resultsIntro: {
+      ko: '4계절 퍼스널컬러 중 당신에게 맞는 톤을 찾아드립니다.',
+      en: 'We find the tone that suits you among the 4 seasonal personal colors.',
+      ja: '4シーズンのパーソナルカラーの中からあなたに合うトーンをお探しします。',
+      zh: '我们会在四季个人色彩中找到适合您的色调。',
+      th: 'เราจะหาโทนสีที่เหมาะกับคุณจาก 4 ฤดูกาล'
+    },
+    keyBenefits: { ko: '핵심 혜택', en: 'Key Benefits', ja: 'コアベネフィット', zh: '核心优势', th: 'ประโยชน์หลัก' },
+    tryDemo: { ko: '데모 체험하기', en: 'Try Demo', ja: 'デモを試す', zh: '试用演示', th: 'ลองเดโม' },
+    partnershipInquiry: { ko: '파트너십 문의', en: 'Partnership Inquiry', ja: 'パートナーシップお問い合わせ', zh: '合作咨询', th: 'สอบถามความร่วมมือ' },
+    offlineGallery: { ko: '오프라인 체험 현장', en: 'Offline Experience Gallery', ja: 'オフライン体験現場', zh: '线下体验现场', th: 'แกลเลอรีประสบการณ์ออฟไลน์' },
+    autoPlaying: { ko: '자동 재생 중', en: 'Auto-playing', ja: '自動再生中', zh: '自动播放中', th: 'เล่นอัตโนมัติ' },
+    paused: { ko: '일시정지', en: 'Paused', ja: '一時停止', zh: '已暂停', th: 'หยุดชั่วคราว' },
+    clickToEnlarge: { ko: '클릭하여 확대', en: 'Click to enlarge', ja: 'クリックで拡大', zh: '点击放大', th: 'คลิกเพื่อขยาย' },
+    images: { ko: '장', en: 'images', ja: '枚', zh: '张', th: 'ภาพ' }
+  };
+
   // Gallery images - 10 images for slider
   const galleryImages = [
-    { src: '/images/wondermon-store-1.jpg', titleKo: 'WONDER MON 스토어 전경', titleEn: 'WONDER MON Store View' },
-    { src: '/images/wondermon-products.jpg', titleKo: '뷰티 제품 라인업', titleEn: 'Beauty Product Lineup' },
-    { src: '/images/wondermon-logo-mint.jpg', titleKo: 'AI 퍼스널컬러 진단', titleEn: 'AI Personal Color Analysis' },
-    { src: '/images/kfood-popup-1.jpg', titleKo: 'K-Food 체험존', titleEn: 'K-Food Experience Zone' },
-    { src: '/images/celeb-popup-1.jpg', titleKo: '셀럽 팝업스토어', titleEn: 'Celebrity Pop-up Store' },
-    { src: '/images/event-1.jpg', titleKo: '패션 이벤트', titleEn: 'Fashion Event' },
-    { src: '/images/korangi-christmas.jpg', titleKo: '크리스마스 스페셜', titleEn: 'Christmas Special' },
-    { src: '/images/wondermon-store-1.jpg', titleKo: '뷰티 체험 현장', titleEn: 'Beauty Experience' },
-    { src: '/images/wondermon-products.jpg', titleKo: '제품 디스플레이', titleEn: 'Product Display' },
-    { src: '/images/celeb-popup-1.jpg', titleKo: '팬 미팅 현장', titleEn: 'Fan Meeting Scene' },
+    { src: '/images/wondermon-store-1.jpg', title: { ko: 'WONDER MON 스토어 전경', en: 'WONDER MON Store View', ja: 'WONDER MON ストア全景', zh: 'WONDER MON 店铺全景', th: 'WONDER MON Store View' } },
+    { src: '/images/wondermon-products.jpg', title: { ko: '뷰티 제품 라인업', en: 'Beauty Product Lineup', ja: 'ビューティー製品ラインナップ', zh: '美妆产品阵容', th: 'สินค้าความงาม' } },
+    { src: '/images/wondermon-logo-mint.jpg', title: { ko: 'AI 퍼스널컬러 진단', en: 'AI Personal Color Analysis', ja: 'AIパーソナルカラー診断', zh: 'AI个人色彩诊断', th: 'AI วิเคราะห์สีผิว' } },
+    { src: '/images/kfood-popup-1.jpg', title: { ko: 'K-Food 체험존', en: 'K-Food Experience Zone', ja: 'K-Food体験ゾーン', zh: 'K-Food体验区', th: 'โซน K-Food' } },
+    { src: '/images/celeb-popup-1.jpg', title: { ko: '셀럽 팝업스토어', en: 'Celebrity Pop-up Store', ja: 'セレブポップアップストア', zh: '明星快闪店', th: 'ป๊อปอัพคนดัง' } },
+    { src: '/images/event-1.jpg', title: { ko: '패션 이벤트', en: 'Fashion Event', ja: 'ファッションイベント', zh: '时尚活动', th: 'อีเวนต์แฟชั่น' } },
+    { src: '/images/korangi-christmas.jpg', title: { ko: '크리스마스 스페셜', en: 'Christmas Special', ja: 'クリスマススペシャル', zh: '圣诞特别活动', th: 'คริสต์มาสพิเศษ' } },
+    { src: '/images/wondermon-store-1.jpg', title: { ko: '뷰티 체험 현장', en: 'Beauty Experience', ja: 'ビューティー体験現場', zh: '美妆体验现场', th: 'ประสบการณ์ความงาม' } },
+    { src: '/images/wondermon-products.jpg', title: { ko: '제품 디스플레이', en: 'Product Display', ja: '製品ディスプレイ', zh: '产品展示', th: 'การจัดแสดงสินค้า' } },
+    { src: '/images/celeb-popup-1.jpg', title: { ko: '팬 미팅 현장', en: 'Fan Meeting Scene', ja: 'ファンミーティング現場', zh: '粉丝见面会现场', th: 'งานแฟนมีตติ้ง' } },
   ];
 
   // Responsive images per view (4 on desktop, 2 on mobile)
@@ -66,54 +104,54 @@ export const WonderMon: React.FC = () => {
   const features = [
     {
       icon: <Palette className="w-6 h-6" />,
-      titleKo: "AI 퍼스널컬러 진단",
-      titleEn: "AI Personal Color Analysis",
-      descKo: "딥러닝 기반 정밀 피부톤 분석으로 나만의 퍼스널컬러를 찾아드립니다",
-      descEn: "Find your personal color through deep learning-based precise skin tone analysis"
+      title: { ko: "AI 퍼스널컬러 진단", en: "AI Personal Color Analysis", ja: "AIパーソナルカラー診断", zh: "AI个人色彩诊断", th: "AI วิเคราะห์สีผิว" },
+      desc: { ko: "딥러닝 기반 정밀 피부톤 분석으로 나만의 퍼스널컬러를 찾아드립니다", en: "Find your personal color through deep learning-based precise skin tone analysis", ja: "ディープラーニング基盤の精密な肌色分析であなただけのパーソナルカラーを見つけます", zh: "通过深度学习精确肤色分析找到您的个人色彩", th: "ค้นหาสีผิวของคุณด้วยการวิเคราะห์โทนสีผิวแบบ Deep Learning" }
     },
     {
       icon: <Sparkles className="w-6 h-6" />,
-      titleKo: "4계절 분석 시스템",
-      titleEn: "4-Season Analysis",
-      descKo: "봄/여름/가을/겨울 세부 톤을 12가지 유형으로 상세 분류",
-      descEn: "Detailed classification into 12 types across Spring/Summer/Autumn/Winter"
+      title: { ko: "4계절 분석 시스템", en: "4-Season Analysis", ja: "4シーズン分析システム", zh: "四季分析系统", th: "ระบบวิเคราะห์ 4 ฤดูกาล" },
+      desc: { ko: "봄/여름/가을/겨울 세부 톤을 12가지 유형으로 상세 분류", en: "Detailed classification into 12 types across Spring/Summer/Autumn/Winter", ja: "春夏秋冬の詳細トーンを12タイプに分類", zh: "将春夏秋冬详细色调分为12种类型", th: "แบ่งประเภทอย่างละเอียดเป็น 12 ประเภทตามฤดูกาล" }
     },
     {
       icon: <ShoppingBag className="w-6 h-6" />,
-      titleKo: "맞춤 제품 추천",
-      titleEn: "Custom Product Recommendations",
-      descKo: "패션, 메이크업, 컬러렌즈까지 개인 맞춤 큐레이션",
-      descEn: "Personalized curation for fashion, makeup, and color lenses"
+      title: { ko: "맞춤 제품 추천", en: "Custom Product Recommendations", ja: "カスタム製品推奨", zh: "定制产品推荐", th: "แนะนำผลิตภัณฑ์เฉพาะบุคคล" },
+      desc: { ko: "패션, 메이크업, 컬러렌즈까지 개인 맞춤 큐레이션", en: "Personalized curation for fashion, makeup, and color lenses", ja: "ファッション、メイクアップ、カラーレンズまでパーソナライズキュレーション", zh: "时尚、化妆、彩色隐形眼镜的个性化策展", th: "แนะนำแฟชั่น การแต่งหน้า และคอนแทคเลนส์" }
     },
     {
       icon: <Users className="w-6 h-6" />,
-      titleKo: "오프라인 이벤트 연계",
-      titleEn: "Offline Event Integration",
-      descKo: "팝업스토어에서 직접 체험하고 즉시 구매까지 연결",
-      descEn: "Experience at pop-up stores with instant purchase connection"
+      title: { ko: "오프라인 이벤트 연계", en: "Offline Event Integration", ja: "オフラインイベント連携", zh: "线下活动联动", th: "เชื่อมต่อกิจกรรมออฟไลน์" },
+      desc: { ko: "팝업스토어에서 직접 체험하고 즉시 구매까지 연결", en: "Experience at pop-up stores with instant purchase connection", ja: "ポップアップストアで直接体験し、即時購入まで連結", zh: "在快闪店直接体验并即时购买", th: "สัมผัสประสบการณ์ที่ป๊อปอัพสโตร์และซื้อได้ทันที" }
     }
   ];
 
   const processSteps = [
-    { stepKo: '얼굴 촬영', stepEn: 'Face Capture', icon: <Camera className="w-5 h-5" /> },
-    { stepKo: 'AI 분석', stepEn: 'AI Analysis', icon: <Zap className="w-5 h-5" /> },
-    { stepKo: '컬러 진단', stepEn: 'Color Diagnosis', icon: <Palette className="w-5 h-5" /> },
-    { stepKo: '제품 추천', stepEn: 'Product Recommendation', icon: <ShoppingBag className="w-5 h-5" /> },
+    { step: { ko: '얼굴 촬영', en: 'Face Capture', ja: '顔撮影', zh: '面部拍摄', th: 'ถ่ายภาพใบหน้า' }, icon: <Camera className="w-5 h-5" /> },
+    { step: { ko: 'AI 분석', en: 'AI Analysis', ja: 'AI分析', zh: 'AI分析', th: 'AI วิเคราะห์' }, icon: <Zap className="w-5 h-5" /> },
+    { step: { ko: '컬러 진단', en: 'Color Diagnosis', ja: 'カラー診断', zh: '色彩诊断', th: 'วินิจฉัยสี' }, icon: <Palette className="w-5 h-5" /> },
+    { step: { ko: '제품 추천', en: 'Product Recommendation', ja: '製品推奨', zh: '产品推荐', th: 'แนะนำผลิตภัณฑ์' }, icon: <ShoppingBag className="w-5 h-5" /> },
   ];
 
   const colorSeasons = [
-    { nameKo: '봄 웜톤', nameEn: 'Spring Warm', color: 'from-orange-300 to-yellow-400', emoji: '🌸', descKo: '밝고 화사한', descEn: 'Bright & Vivid' },
-    { nameKo: '여름 쿨톤', nameEn: 'Summer Cool', color: 'from-pink-300 to-purple-400', emoji: '🌊', descKo: '부드럽고 우아한', descEn: 'Soft & Elegant' },
-    { nameKo: '가을 웜톤', nameEn: 'Autumn Warm', color: 'from-amber-400 to-orange-500', emoji: '🍂', descKo: '깊고 풍부한', descEn: 'Deep & Rich' },
-    { nameKo: '겨울 쿨톤', nameEn: 'Winter Cool', color: 'from-blue-400 to-indigo-500', emoji: '❄️', descKo: '선명하고 강렬한', descEn: 'Clear & Intense' },
+    { name: { ko: '봄 웜톤', en: 'Spring Warm', ja: '春ウォーム', zh: '春季暖色调', th: 'ฤดูใบไม้ผลิอบอุ่น' }, color: 'from-orange-300 to-yellow-400', emoji: '🌸', desc: { ko: '밝고 화사한', en: 'Bright & Vivid', ja: '明るく華やか', zh: '明亮活泼', th: 'สดใสและมีชีวิตชีวา' } },
+    { name: { ko: '여름 쿨톤', en: 'Summer Cool', ja: '夏クール', zh: '夏季冷色调', th: 'ฤดูร้อนเย็น' }, color: 'from-pink-300 to-purple-400', emoji: '🌊', desc: { ko: '부드럽고 우아한', en: 'Soft & Elegant', ja: '柔らかく優雅', zh: '柔和优雅', th: 'นุ่มนวลและสง่างาม' } },
+    { name: { ko: '가을 웜톤', en: 'Autumn Warm', ja: '秋ウォーム', zh: '秋季暖色调', th: 'ฤดูใบไม้ร่วงอบอุ่น' }, color: 'from-amber-400 to-orange-500', emoji: '🍂', desc: { ko: '깊고 풍부한', en: 'Deep & Rich', ja: '深く豊か', zh: '深沉丰富', th: 'ลึกและหลากหลาย' } },
+    { name: { ko: '겨울 쿨톤', en: 'Winter Cool', ja: '冬クール', zh: '冬季冷色调', th: 'ฤดูหนาวเย็น' }, color: 'from-blue-400 to-indigo-500', emoji: '❄️', desc: { ko: '선명하고 강렬한', en: 'Clear & Intense', ja: '鮮明で強烈', zh: '清晰强烈', th: 'ชัดเจนและเข้มข้น' } },
   ];
 
   const stats = [
-    { valueKo: '98.5%', valueEn: '98.5%', labelKo: '분석 정확도', labelEn: 'Accuracy', icon: <Target className="w-5 h-5" /> },
-    { valueKo: '30,000+', valueEn: '30K+', labelKo: '누적 진단 수', labelEn: 'Total Diagnoses', icon: <Users className="w-5 h-5" /> },
-    { valueKo: '65%', valueEn: '65%', labelKo: '구매 전환율', labelEn: 'Conversion Rate', icon: <ShoppingBag className="w-5 h-5" /> },
-    { valueKo: '4.9', valueEn: '4.9', labelKo: '고객 만족도', labelEn: 'Satisfaction', icon: <Star className="w-5 h-5" /> },
+    { value: { ko: '98.5%', en: '98.5%', ja: '98.5%', zh: '98.5%', th: '98.5%' }, label: { ko: '분석 정확도', en: 'Accuracy', ja: '分析精度', zh: '分析准确度', th: 'ความแม่นยำ' }, icon: <Target className="w-5 h-5" /> },
+    { value: { ko: '30,000+', en: '30K+', ja: '30,000+', zh: '30,000+', th: '30,000+' }, label: { ko: '누적 진단 수', en: 'Total Diagnoses', ja: '累計診断数', zh: '累计诊断数', th: 'การวินิจฉัยทั้งหมด' }, icon: <Users className="w-5 h-5" /> },
+    { value: { ko: '65%', en: '65%', ja: '65%', zh: '65%', th: '65%' }, label: { ko: '구매 전환율', en: 'Conversion Rate', ja: '購買転換率', zh: '购买转化率', th: 'อัตราการแปลง' }, icon: <ShoppingBag className="w-5 h-5" /> },
+    { value: { ko: '4.9', en: '4.9', ja: '4.9', zh: '4.9', th: '4.9' }, label: { ko: '고객 만족도', en: 'Satisfaction', ja: '顧客満足度', zh: '客户满意度', th: 'ความพึงพอใจ' }, icon: <Star className="w-5 h-5" /> },
   ];
+
+  const keyBenefitsList = {
+    ko: ["AI 딥러닝 기반 피부톤 정밀 분석", "4계절 세부 톤 분류 (웜톤/쿨톤 세분화)", "패션, 메이크업, 컬러렌즈 맞춤 추천"],
+    en: ["AI deep learning-based precise skin tone analysis", "4-season detailed tone classification", "Customized fashion, makeup, and lens recommendations"],
+    ja: ["AIディープラーニング基盤の精密肌色分析", "4シーズン詳細トーン分類（ウォーム/クール細分化）", "ファッション、メイクアップ、カラーレンズカスタム推奨"],
+    zh: ["AI深度学习精确肤色分析", "四季详细色调分类（暖/冷色调细分）", "时尚、化妆、彩色隐形眼镜定制推荐"],
+    th: ["การวิเคราะห์โทนสีผิวแบบ AI Deep Learning", "การจำแนกโทน 4 ฤดูกาลอย่างละเอียด", "แนะนำแฟชั่น การแต่งหน้า และเลนส์"]
+  };
 
   return (
     <section id="wondermon" className="py-24 bg-gradient-to-b from-gray-50 via-white to-teal-50/30 overflow-hidden">
@@ -123,17 +161,14 @@ export const WonderMon: React.FC = () => {
         <div className="text-center mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-teal-100 to-cyan-100 border border-teal-200 text-teal-700 text-sm font-semibold mb-6">
             <Sparkles size={16} className="text-teal-500" />
-            <span>{language === 'ko' ? 'Spotlight Technology' : 'Spotlight Technology'}</span>
+            <span>{getText(texts.spotlightTech)}</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-bold font-heading text-dark mb-4">
             WONDER MON
             <span className="text-xl md:text-2xl text-primary font-semibold ml-3">× boon7shop</span>
           </h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            {language === 'ko'
-              ? 'AI 기반 퍼스널컬러 진단 플랫폼으로 K-Beauty의 미래를 경험하세요. 정확한 피부톤 분석을 통해 나만의 컬러를 찾고, 맞춤 패션과 메이크업 추천을 받아보세요.'
-              : 'Experience the future of K-Beauty with our AI-driven Personal Color Analysis platform. Find your colors through accurate skin tone analysis and get customized fashion and makeup recommendations.'
-            }
+            {getText(texts.subtitle)}
           </p>
         </div>
 
@@ -145,9 +180,9 @@ export const WonderMon: React.FC = () => {
                 {stat.icon}
               </div>
               <p className="text-3xl font-bold bg-gradient-to-r from-teal-500 to-cyan-500 bg-clip-text text-transparent">
-                {language === 'ko' ? stat.valueKo : stat.valueEn}
+                {getText(stat.value)}
               </p>
-              <p className="text-sm text-gray-500 mt-1">{language === 'ko' ? stat.labelKo : stat.labelEn}</p>
+              <p className="text-sm text-gray-500 mt-1">{getText(stat.label)}</p>
             </div>
           ))}
         </div>
@@ -173,7 +208,7 @@ export const WonderMon: React.FC = () => {
 
               {/* Video Label */}
               <div className="absolute bottom-6 left-6 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold text-dark">
-                {language === 'ko' ? '체험 영상 보기' : 'Watch Demo'}
+                {getText(texts.watchDemo)}
               </div>
             </div>
 
@@ -202,7 +237,7 @@ export const WonderMon: React.FC = () => {
                   AI
                 </div>
                 <div>
-                  <p className="text-xs opacity-80">{language === 'ko' ? '분석 정확도' : 'Accuracy'}</p>
+                  <p className="text-xs opacity-80">{getText(texts.accuracy)}</p>
                   <p className="text-2xl font-bold">98.5%</p>
                 </div>
               </div>
@@ -214,9 +249,9 @@ export const WonderMon: React.FC = () => {
             {/* Tab Navigation */}
             <div className="flex gap-2 mb-8">
               {[
-                { id: 'features', labelKo: '주요 기능', labelEn: 'Features' },
-                { id: 'process', labelKo: '진단 과정', labelEn: 'Process' },
-                { id: 'results', labelKo: '진단 결과', labelEn: 'Results' },
+                { id: 'features', label: texts.tabFeatures },
+                { id: 'process', label: texts.tabProcess },
+                { id: 'results', label: texts.tabResults },
               ].map((tab) => (
                 <button
                   key={tab.id}
@@ -227,7 +262,7 @@ export const WonderMon: React.FC = () => {
                       : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                   }`}
                 >
-                  {language === 'ko' ? tab.labelKo : tab.labelEn}
+                  {getText(tab.label)}
                 </button>
               ))}
             </div>
@@ -242,10 +277,10 @@ export const WonderMon: React.FC = () => {
                     </div>
                     <div>
                       <h4 className="font-bold text-dark text-lg mb-1">
-                        {language === 'ko' ? feature.titleKo : feature.titleEn}
+                        {getText(feature.title)}
                       </h4>
                       <p className="text-gray-500 text-sm leading-relaxed">
-                        {language === 'ko' ? feature.descKo : feature.descEn}
+                        {getText(feature.desc)}
                       </p>
                     </div>
                   </div>
@@ -256,10 +291,7 @@ export const WonderMon: React.FC = () => {
             {activeTab === 'process' && (
               <div className="space-y-6">
                 <p className="text-gray-600 mb-6">
-                  {language === 'ko'
-                    ? '간단한 4단계로 나만의 퍼스널컬러를 찾아보세요.'
-                    : 'Find your personal color in 4 simple steps.'
-                  }
+                  {getText(texts.processIntro)}
                 </p>
                 <div className="relative">
                   {processSteps.map((step, idx) => (
@@ -274,7 +306,7 @@ export const WonderMon: React.FC = () => {
                       </div>
                       <div className="flex-1 bg-white p-4 rounded-xl border border-gray-100 shadow-sm">
                         <span className="text-xs text-teal-500 font-bold">STEP {idx + 1}</span>
-                        <p className="font-semibold text-dark">{language === 'ko' ? step.stepKo : step.stepEn}</p>
+                        <p className="font-semibold text-dark">{getText(step.step)}</p>
                       </div>
                     </div>
                   ))}
@@ -285,10 +317,7 @@ export const WonderMon: React.FC = () => {
             {activeTab === 'results' && (
               <div className="space-y-6">
                 <p className="text-gray-600 mb-6">
-                  {language === 'ko'
-                    ? '4계절 퍼스널컬러 중 당신에게 맞는 톤을 찾아드립니다.'
-                    : 'We find the tone that suits you among the 4 seasonal personal colors.'
-                  }
+                  {getText(texts.resultsIntro)}
                 </p>
                 <div className="grid grid-cols-2 gap-4">
                   {colorSeasons.map((season, idx) => (
@@ -296,8 +325,8 @@ export const WonderMon: React.FC = () => {
                       <div className={`absolute inset-0 bg-gradient-to-br ${season.color} opacity-10 group-hover:opacity-20 transition-opacity`}></div>
                       <div className="relative">
                         <span className="text-3xl mb-2 block">{season.emoji}</span>
-                        <h4 className="font-bold text-dark">{language === 'ko' ? season.nameKo : season.nameEn}</h4>
-                        <p className="text-sm text-gray-500">{language === 'ko' ? season.descKo : season.descEn}</p>
+                        <h4 className="font-bold text-dark">{getText(season.name)}</h4>
+                        <p className="text-sm text-gray-500">{getText(season.desc)}</p>
                       </div>
                     </div>
                   ))}
@@ -309,18 +338,10 @@ export const WonderMon: React.FC = () => {
             <div className="mt-8 p-6 bg-gradient-to-r from-teal-50 to-cyan-50 rounded-2xl border border-teal-100">
               <h4 className="font-bold text-dark mb-4 flex items-center gap-2">
                 <Award className="w-5 h-5 text-teal-500" />
-                {language === 'ko' ? '핵심 혜택' : 'Key Benefits'}
+                {getText(texts.keyBenefits)}
               </h4>
               <ul className="space-y-2">
-                {(language === 'ko' ? [
-                  "AI 딥러닝 기반 피부톤 정밀 분석",
-                  "4계절 세부 톤 분류 (웜톤/쿨톤 세분화)",
-                  "패션, 메이크업, 컬러렌즈 맞춤 추천"
-                ] : [
-                  "AI deep learning-based precise skin tone analysis",
-                  "4-season detailed tone classification",
-                  "Customized fashion, makeup, and lens recommendations"
-                ]).map((item, idx) => (
+                {(keyBenefitsList[language] || keyBenefitsList.en).map((item, idx) => (
                   <li key={idx} className="flex items-center gap-3">
                     <CheckCircle2 className="text-teal-500 w-5 h-5 flex-shrink-0" />
                     <span className="text-gray-700 text-sm">{item}</span>
@@ -332,11 +353,11 @@ export const WonderMon: React.FC = () => {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row gap-4 mt-8">
               <button className="flex-1 px-8 py-4 bg-gradient-to-r from-teal-500 to-cyan-500 text-white rounded-full font-bold hover:shadow-xl hover:shadow-teal-200 transition-all hover:scale-105 flex items-center justify-center gap-2">
-                {language === 'ko' ? '데모 체험하기' : 'Try Demo'}
+                {getText(texts.tryDemo)}
                 <ArrowRight size={18} />
               </button>
               <button className="flex-1 px-8 py-4 border-2 border-teal-500 text-teal-600 rounded-full font-bold hover:bg-teal-50 transition-colors">
-                {language === 'ko' ? '파트너십 문의' : 'Partnership Inquiry'}
+                {getText(texts.partnershipInquiry)}
               </button>
             </div>
           </div>
@@ -346,13 +367,13 @@ export const WonderMon: React.FC = () => {
         <div className="mt-16">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-2xl font-bold text-dark">
-              {language === 'ko' ? '오프라인 체험 현장' : 'Offline Experience Gallery'}
+              {getText(texts.offlineGallery)}
             </h3>
             <div className="flex items-center gap-2">
               {/* Auto-play indicator */}
               <div className={`w-2 h-2 rounded-full ${isAutoPlaying ? 'bg-teal-500 animate-pulse' : 'bg-gray-300'}`}></div>
               <span className="text-xs text-gray-500 mr-4">
-                {isAutoPlaying ? (language === 'ko' ? '자동 재생 중' : 'Auto-playing') : (language === 'ko' ? '일시정지' : 'Paused')}
+                {isAutoPlaying ? getText(texts.autoPlaying) : getText(texts.paused)}
               </span>
               {/* Navigation Buttons */}
               <button
@@ -386,17 +407,17 @@ export const WonderMon: React.FC = () => {
                 >
                   <img
                     src={img.src}
-                    alt={language === 'ko' ? img.titleKo : img.titleEn}
+                    alt={getText(img.title)}
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                   />
                   {/* Overlay */}
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     <div className="absolute bottom-0 left-0 right-0 p-4">
                       <p className="text-white font-semibold text-sm">
-                        {language === 'ko' ? img.titleKo : img.titleEn}
+                        {getText(img.title)}
                       </p>
                       <p className="text-white/70 text-xs mt-1">
-                        {language === 'ko' ? '클릭하여 확대' : 'Click to enlarge'}
+                        {getText(texts.clickToEnlarge)}
                       </p>
                     </div>
                   </div>
@@ -430,7 +451,7 @@ export const WonderMon: React.FC = () => {
 
           {/* Image Count */}
           <p className="text-center text-gray-400 text-sm mt-4">
-            {sliderPosition + 1} - {Math.min(sliderPosition + imagesPerView, galleryImages.length)} / {galleryImages.length} {language === 'ko' ? '장' : 'images'}
+            {sliderPosition + 1} - {Math.min(sliderPosition + imagesPerView, galleryImages.length)} / {galleryImages.length} {getText(texts.images)}
           </p>
         </div>
 
@@ -487,10 +508,7 @@ export const WonderMon: React.FC = () => {
             {/* Image Info */}
             <div className="absolute bottom-0 left-0 right-0 p-6 bg-gradient-to-t from-black/80 to-transparent">
               <p className="text-white font-bold text-lg">
-                {language === 'ko'
-                  ? galleryImages.find(img => img.src === selectedImage)?.titleKo
-                  : galleryImages.find(img => img.src === selectedImage)?.titleEn
-                }
+                {getText(galleryImages.find(img => img.src === selectedImage)?.title || { ko: '', en: '', ja: '', zh: '', th: '' })}
               </p>
               <p className="text-white/60 text-sm mt-1">
                 {galleryImages.findIndex(img => img.src === selectedImage) + 1} / {galleryImages.length}

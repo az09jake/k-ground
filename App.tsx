@@ -12,10 +12,14 @@ import { LanguageSelector } from './components/LanguageSelector';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { Menu, X } from 'lucide-react';
 
+type LangText = { ko: string; en: string; ja: string; zh: string; th: string };
+
 const Navigation: React.FC = () => {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = React.useState(false);
   const [scrolled, setScrolled] = React.useState(false);
+
+  const getText = (obj: LangText): string => obj[language] || obj.en;
 
   // 스크롤 시 헤더 배경 변경
   React.useEffect(() => {
@@ -26,12 +30,16 @@ const Navigation: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const texts = {
+    contact: { ko: '문의하기', en: 'Contact Us', ja: 'お問い合わせ', zh: '联系我们', th: 'ติดต่อเรา' },
+  };
+
   const navItems = [
-    { labelKo: '테마', labelEn: 'Themes', href: '#themes' },
-    { labelKo: 'O4O 모델', labelEn: 'O4O Model', href: '#model' },
-    { labelKo: '원더몬', labelEn: 'Wonder Mon', href: '#wondermon' },
-    { labelKo: '성공 사례', labelEn: 'Cases', href: '#cases' },
-    { labelKo: '글로벌', labelEn: 'Global', href: '#partners' },
+    { label: { ko: '테마', en: 'Themes', ja: 'テーマ', zh: '主题', th: 'ธีม' }, href: '#themes' },
+    { label: { ko: 'O4O 모델', en: 'O4O Model', ja: 'O4Oモデル', zh: 'O4O模式', th: 'โมเดล O4O' }, href: '#model' },
+    { label: { ko: '원더몬', en: 'Wonder Mon', ja: 'ワンダーモン', zh: 'Wonder Mon', th: 'Wonder Mon' }, href: '#wondermon' },
+    { label: { ko: '성공 사례', en: 'Cases', ja: '成功事例', zh: '成功案例', th: 'กรณีศึกษา' }, href: '#cases' },
+    { label: { ko: '글로벌', en: 'Global', ja: 'グローバル', zh: '全球', th: 'ทั่วโลก' }, href: '#partners' },
   ];
 
   return (
@@ -60,7 +68,7 @@ const Navigation: React.FC = () => {
                   : 'text-white/90 hover:text-primary'
               }`}
             >
-              {language === 'ko' ? item.labelKo : item.labelEn}
+              {getText(item.label)}
             </a>
           ))}
         </div>
@@ -69,7 +77,7 @@ const Navigation: React.FC = () => {
         <div className="flex items-center gap-3">
           <LanguageSelector scrolled={scrolled} />
           <button className="hidden sm:flex px-5 py-2.5 bg-gradient-to-r from-primary to-secondary text-white text-sm font-bold rounded-full hover:shadow-lg hover:shadow-primary/30 transition-all hover:scale-105">
-            {language === 'ko' ? '문의하기' : 'Contact Us'}
+            {getText(texts.contact)}
           </button>
 
           {/* Mobile Menu Button */}
@@ -103,11 +111,11 @@ const Navigation: React.FC = () => {
                     : 'text-white/80 hover:text-primary'
                 }`}
               >
-                {language === 'ko' ? item.labelKo : item.labelEn}
+                {getText(item.label)}
               </a>
             ))}
             <button className="w-full mt-4 px-5 py-3 bg-gradient-to-r from-primary to-secondary text-white font-bold rounded-full">
-              {language === 'ko' ? '문의하기' : 'Contact Us'}
+              {getText(texts.contact)}
             </button>
           </div>
         </div>
