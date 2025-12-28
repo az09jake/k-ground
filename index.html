@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>K-GROUND | K-Culture를 경험하는 새로운 방식</title>
+    <meta name="description" content="K-FOOD, K-FASHION, K-BEAUTY, K-CONTENTS를 하나로. IP와 인플루언서가 만드는 새로운 K-Culture 체험 플랫폼">
+    <meta name="keywords" content="K-Culture, K-POP, K-Beauty, K-Food, K-Fashion, Korean Culture, 한류, 케이그라운드, 팝업스토어, 원더몬">
+    <meta property="og:title" content="K-GROUND | K-Culture를 경험하는 새로운 방식">
+    <meta property="og:description" content="IP × Influencer × 오프라인 체험이 연결되는 복합 문화 플랫폼">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://k-ground.co.kr">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Pretendard:wght@400;600;700&display=swap" rel="stylesheet">
+    <script>
+      // Polyfill process for browser environment to prevent crash
+      if (typeof process === 'undefined') {
+        window.process = {
+          env: {
+            NODE_ENV: 'development',
+            API_KEY: '' // Safe fallback
+          }
+        };
+      }
+
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#FF6B35', // Orange
+              secondary: '#FF8B8B', // Coral Pink
+              accent: '#7FDBDA', // Mint
+              dark: '#2D2D2D', // Charcoal
+              light: '#FAFAFA', // Off-White
+            },
+            fontFamily: {
+              sans: ['Pretendard', 'sans-serif'],
+              heading: ['Poppins', 'sans-serif'],
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+      html { scroll-behavior: smooth; }
+      body { font-family: 'Pretendard', sans-serif; background-color: #FAFAFA; color: #2D2D2D; }
+      h1, h2, h3, h4, h5, h6 { font-family: 'Poppins', sans-serif; }
+
+      /* Custom Animations */
+      @keyframes gradient {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+      }
+
+      .animate-gradient {
+        animation: gradient 3s ease infinite;
+      }
+
+      @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-10px); }
+      }
+
+      .animate-float {
+        animation: float 3s ease-in-out infinite;
+      }
+
+      /* Smooth scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: #f1f1f1;
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #FF6B35;
+        border-radius: 4px;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #FF8B8B;
+      }
+    </style>
+  <script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.2.0",
+    "react-dom/client": "https://esm.sh/react-dom@18.2.0/client",
+    "react-dom": "https://esm.sh/react-dom@18.2.0",
+    "@google/genai": "https://esm.sh/@google/genai@^1.34.0",
+    "lucide-react": "https://esm.sh/lucide-react@0.263.1",
+    "react-dom/": "https://esm.sh/react-dom@^19.2.3/",
+    "react/": "https://esm.sh/react@^19.2.3/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body>
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>
